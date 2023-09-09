@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+    <html>
+   <head>
+   <style>
+   .box {
+       border-style: solid;
+       padding: 25px;
+       width: 750px;
+       box-shadow: 5px 5px 0 0 black;
+       margin-top: 100px;
+       margin-left: 100px;
+   }
+   .menu {
+       border-style: solid;
+       padding: 25px;
+       width: 300px;
+       box-shadow: 5px 5px 0 0 black;
+       margin-left: 100px;
+       margin-top: 20px;
+       font-size: 25px;
+   }
+   </style>
+   </head>
+   <body>
+   <title>hello</title>
+   <div class="box">
+       <h1>{{ title }}
+   
+       </h1>
+       <h2 style="color: grey">09/09/2023</h2>
+       <p>
+        {{ content }}
+       </p>
+   
+   </div>
+   </body>
+    </html>

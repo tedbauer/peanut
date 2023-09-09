@@ -3,7 +3,10 @@ name = "peanut"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-rocket = "=0.5.0-rc.3"
+tokio = { version = "1.32.0", features = ["full"] }
+axum = "0.6.20"
+sqlite = "0.31.1"
+tera = "1.0"
+serde = { version = "1.0.188", features = ["derive"] }
+chrono = "0.4.30"
