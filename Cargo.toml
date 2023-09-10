@@ -10,3 +10,4 @@ sqlite = "0.31.1"
 tera = "1.0"
 serde = { version = "1.0.188", features = ["derive"] }
 chrono = "0.4.30"
+markdown = "0.3.0"

@@ -1,54 +1,144 @@
 <!DOCTYPE html>
-    <html>
-   <head>
+<html>
+<head>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css">
-   <style>
-    body {
-        font-family: "Computer Modern Serif", serif;
-      }
-   .box {
-       border-radius: 5px;
-       border-style: solid;
-       padding: 25px;
-       width: 750px;
-       box-shadow: 5px 5px 0 0 black;
-       margin-top: 100px;
-       margin-left: 100px;
-   }
-   .menu {
-       border-radius: 5px;
-       border-style: solid;
-       padding: 25px;
-       width: 300px;
-       box-shadow: 5px 5px 0 0 black;
-       margin-left: 100px;
-       margin-top: 100px;
-       font-size: 25px;
-   }
-   .notes {
-       border-radius: 5px;
-       border-style: solid;
-       padding: 25px;
-       width: 300px;
-       box-shadow: 5px 5px 0 0 black;
-       margin-left: 100px;
-       margin-top: 20px;
-       font-size: 25px;
-   }
-   </style>
-   </head>
-   <body>
-   <div class="menu">
-       + 🕊 <a href="write-a-card">fleeting note</a>
-       <br>
-       + 📖 <a href="write-a-card">literature note</a>
-       <br>
-       + 🖋️ <a href="write-a-card">permanent note</a>
-       <br>
-       + 🗂️ <a href="write-a-card">index note</a>
+<style>
+/* Dropdown Button */
+  
+  /* Dropdown button on hover & focus */
+  .dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #ddd;}
+  
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+  .show {display:block;}
+
+
+body {
+   font-family: "Computer Modern Serif", serif;
+}
+.box { 
+   border-radius: 5px;
+   border-style: solid;
+   padding: 25px;
+   width: 700px;
+   box-shadow: 5px 5px 0 0 black;
+   margin: 10px;
+}
+.menu {
+   border-radius: 5px;
+   border-style: solid;
+   padding: 25px;
+   width: 300px;
+   box-shadow: 5px 5px 0 0 black;
+   font-size: 25px;
+   margin: 10px;
+}
+.notes {
+   border-radius: 5px;
+   border-style: solid;
+   padding: 25px;
+   width: 300px;
+   box-shadow: 5px 5px 0 0 black;
+   font-size: 25px;
+   margin: 10px;
+}
+</style>
+</head>
+<body>
+    <script>
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+          }
+
+          function appendToText(s) {
+            document.getElementById("newcontent").value += "[" + s + "]" + "(/note?title=" + s + ")";
+        }
+          
+          // Close the dropdown menu if the user clicks outside of it
+          window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+              var dropdowns = document.getElementsByClassName("dropdown-content");
+              var i;
+              for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                  openDropdown.classList.remove('show');
+                }
+              }
+            }
+          }
+    </script>
+<title>hello</title>
+<div style="float: left">
+<div class="menu">
+   + 🕊 <a href="/">fleeting note</a>
+   {# + 🕊 <a href="write-a-card">fleeting note</a> #}
+   {# <br> #}
+   {# + 📖 <a href="write-a-card">literature note</a> #}
+   {# <br> #}
+   {# + 🖋️ <a href="write-a-card">permanent note</a> #}
+   {# <br> #}
+   {# + 🗂️ <a href="write-a-card">index note</a> #}
    </div>
-   <div class="notes">
-        {{ notes }}
-   </div>
-   </body>
-    </html>
+
+<div class="notes">
+    {% if notes == "" %}
+    🕳️
+    {% else %}
+    {{ notes }}
+    {% endif %}
+</div>
+</div>
+<div style="float: left">
+<div class="box">
+   <h1>🕊 New fleeting note</h1>
+   <h2 style="color: grey">{{ date }} </h2>
+   <form action="/put-card" method="get">
+     <input type="text" name="title" placeholder="Title">
+
+     <div class="dropdown" style="float:right;">
+        <input type="button" value="Link to note" onclick="myFunction()" class="dropbtn"></button>
+        <div id="myDropdown" class="dropdown-content">
+            {{ notes_drop }}
+        </div>
+      </div>
+
+
+     <br><br>
+      <textarea id="newcontent" name="content" rows="25" cols="85" placeholder="What do you want to write about?"></textarea>
+   <br><br>
+   <input type="submit" value="Submit">
+   <input type="hidden" name="date" value="{{ date }}" />
+   </form>
+</div>
+</div>
+</body>
+</html>

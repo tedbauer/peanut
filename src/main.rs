@@ -8,6 +8,7 @@ use axum::{
     response::Redirect,
     Router,
 };
+extern crate markdown;
 use chrono::Local;
 use serde::{Deserialize, Serialize};
 
@@ -46,10 +47,11 @@ async fn note(
 
     let query = format!("SELECT * FROM users WHERE title = '{}'", params.title);
     let query2 = format!("SELECT * FROM users WHERE title = '{}'", params.title);
+    let query3 = "SELECT * FROM users";
     let conn: Arc<Mutex<Connection>> = state.clone();
     let conn2 = conn.lock().unwrap();
 
-    let content = conn2
+    let content_md = conn2
         .prepare(query)
         .unwrap()
         .into_iter()
@@ -57,6 +59,7 @@ async fn note(
         .map(|row| row.unwrap().read::<&str, _>("content").to_string())
         .collect::<Vec<_>>()
         .join("");
+    let content = markdown::to_html(&content_md);
 
     let date = conn2
         .prepare(query2)
@@ -67,8 +70,19 @@ async fn note(
         .collect::<Vec<_>>()
         .join("");
 
+        let titles = conn2
+        .prepare(query3)
+        .unwrap()
+        .into_iter()
+        .into_iter()
+        .map(|row| row.unwrap().read::<&str, _>("title").to_string())
+        .map(|title| format!("<li><a href=\"/note?title={}\">{}</a></li>", title, title))
+        .collect::<Vec<_>>()
+        .join("");
+
     context.insert("content", &content);
     context.insert("title", &params.title);
+    context.insert("notes", &titles);
     context.insert("date", &date);
     Html(tera.render("card.html.tera", &context).unwrap())
 }
@@ -78,6 +92,7 @@ async fn hello(State(state): State<Arc<Mutex<Connection>>>) -> impl IntoResponse
     let mut context = tera::Context::new();
 
     let query = "SELECT * FROM users";
+    let query2 = "SELECT * FROM users";
     let conn: Arc<Mutex<Connection>> = state.clone();
     let conn2 = conn.lock().unwrap();
 
@@ -91,7 +106,20 @@ async fn hello(State(state): State<Arc<Mutex<Connection>>>) -> impl IntoResponse
         .collect::<Vec<_>>()
         .join("");
 
+    let titles2 = conn2
+        .prepare(query2)
+        .unwrap()
+        .into_iter()
+        .into_iter()
+        .map(|row| row.unwrap().read::<&str, _>("title").to_string())
+        .map(|title| format!("<input style=\"all:unset\" type=\"button\" value=\"{}\" onclick=\"appendToText('{}')\"></input>", title, title))
+        .collect::<Vec<_>>()
+        .join("<br>");
+
+
     context.insert("notes", &titles);
+    context.insert("notes_drop", &titles2);
+    context.insert("date", &format!("{}", Local::now().format("%m/%d/%Y")));
     Html(tera.render("index.html.tera", &context).unwrap())
 }
 
@@ -109,7 +137,7 @@ async fn put_card(
     let conn: Arc<Mutex<Connection>> = state.clone();
     let conn2 = conn.lock().unwrap();
     conn2.execute(query).unwrap();
-    Redirect::to("/")
+    Redirect::to(&("/note?title=".to_owned() + &params.title))
 }
 
 async fn new_card(

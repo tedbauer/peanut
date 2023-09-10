@@ -3,27 +3,25 @@
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css">
 <style>
-   body {
-      font-family: "Computer Modern Serif", serif;
-    }
+body {
+   font-family: "Computer Modern Serif", serif;
+}
 .box {
        border-radius: 5px;
    border-style: solid;
    padding: 25px;
    width: 700px;
    box-shadow: 5px 5px 0 0 black;
-   margin: 100px;
-   float: left;
+   margin: 10px;
 }
 .menu {
        border-radius: 5px;
-   float: left;
    border-style: solid;
    padding: 25px;
    width: 300px;
    box-shadow: 5px 5px 0 0 black;
-   margin-top: 100px;
    font-size: 25px;
+   margin: 10px;
 }
 .notes {
    border-radius: 5px;
@@ -31,14 +29,27 @@
    padding: 25px;
    width: 300px;
    box-shadow: 5px 5px 0 0 black;
-   margin-left: 100px;
-   margin-top: 20px;
    font-size: 25px;
+   margin: 10px;
 }
 </style>
 </head>
 <body>
 <title>hello</title>
+<div style="float: left">
+<div class="menu">
+   + 🕊 <a href="write-a-card">fleeting note</a>
+   {# <br> #}
+   {# + 📖 <a href="write-a-card">literature note</a> #}
+   {# <br> #}
+   {# + 🖋️ <a href="write-a-card">permanent note</a> #}
+   <br>
+   + 🗂️ <a href="write-a-card">index note</a>
+</div>
+<div class="notes">
+</div>
+</div>
+<div style="float: left">
 <div class="box">
    <h1>🕊 New fleeting note</h1>
    <h2 style="color: grey">{{ date }} </h2>
@@ -49,6 +60,7 @@
    <input type="submit" value="Submit">
    <input type="hidden" name="date" value="{{ date }}" />
    </form>
+</div>
 </div>
 </body>
 </html>
