@@ -1,16 +1,22 @@
 <!DOCTYPE html>
     <html>
    <head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css">
    <style>
+    body {
+        font-family: "Computer Modern Serif", serif;
+      }
    .box {
+       border-radius: 5px;
        border-style: solid;
        padding: 25px;
-       width: 750px;
+       width: 600px;
        box-shadow: 5px 5px 0 0 black;
        margin-top: 100px;
        margin-left: 100px;
    }
    .menu {
+       border-radius: 5px;
        border-style: solid;
        padding: 25px;
        width: 300px;
@@ -24,14 +30,23 @@
    <body>
    <title>hello</title>
    <div class="box">
-       <h1>{{ title }}
-   
-       </h1>
-       <h2 style="color: grey">09/09/2023</h2>
+       <h1>{{ title }} <span style="color: grey"><i>{{date}}</i></span></h1>
        <p>
         {{ content }}
        </p>
    
    </div>
+   <div class="menu">
+    + 🕊 <a href="write-a-card">fleeting note</a>
+    <br>
+    + 📖 <a href="write-a-card">literature note</a>
+    <br>
+    + 🖋️ <a href="write-a-card">permanent note</a>
+    <br>
+    + 🗂️ <a href="write-a-card">index note</a>
+</div>
+<div class="notes">
+     {{ notes }}
+</div>
    </body>
     </html>

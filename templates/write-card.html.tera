@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css">
 <style>
+   body {
+      font-family: "Computer Modern Serif", serif;
+    }
 .box {
+       border-radius: 5px;
    border-style: solid;
    padding: 25px;
    width: 700px;
@@ -11,6 +16,7 @@
    float: left;
 }
 .menu {
+       border-radius: 5px;
    float: left;
    border-style: solid;
    padding: 25px;
@@ -19,13 +25,23 @@
    margin-top: 100px;
    font-size: 25px;
 }
+.notes {
+   border-radius: 5px;
+   border-style: solid;
+   padding: 25px;
+   width: 300px;
+   box-shadow: 5px 5px 0 0 black;
+   margin-left: 100px;
+   margin-top: 20px;
+   font-size: 25px;
+}
 </style>
 </head>
 <body>
 <title>hello</title>
 <div class="box">
-   <h1>Write a new card</h1>
-   <h2 style="color: grey">Date: {{ date }} </h2>
+   <h1>🕊 New fleeting note</h1>
+   <h2 style="color: grey">{{ date }} </h2>
    <form action="/put-card" method="get">
      <input type="text" name="title" placeholder="Title"><br><br>
       <textarea name="content" rows="25" cols="80" placeholder="What do you want to write about?"></textarea>

@@ -1,8 +1,13 @@
 <!DOCTYPE html>
     <html>
    <head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/aaaakshat/cm-web-fonts@latest/fonts.css">
    <style>
+    body {
+        font-family: "Computer Modern Serif", serif;
+      }
    .box {
+       border-radius: 5px;
        border-style: solid;
        padding: 25px;
        width: 750px;
@@ -11,6 +16,7 @@
        margin-left: 100px;
    }
    .menu {
+       border-radius: 5px;
        border-style: solid;
        padding: 25px;
        width: 300px;
@@ -20,6 +26,7 @@
        font-size: 25px;
    }
    .notes {
+       border-radius: 5px;
        border-style: solid;
        padding: 25px;
        width: 300px;
@@ -32,7 +39,13 @@
    </head>
    <body>
    <div class="menu">
-       <a href="write-a-card">+ write a new card</a>
+       + 🕊 <a href="write-a-card">fleeting note</a>
+       <br>
+       + 📖 <a href="write-a-card">literature note</a>
+       <br>
+       + 🖋️ <a href="write-a-card">permanent note</a>
+       <br>
+       + 🗂️ <a href="write-a-card">index note</a>
    </div>
    <div class="notes">
         {{ notes }}
