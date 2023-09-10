@@ -97,61 +97,16 @@ body {
           }
     </script>
 <title>hello</title>
-<div class="box" style="font-size:15px; width:1070px">
-    {% if username == "" %}
-    <b><a href="/home">Login</a></b>
-    {% else %}
-    <b>{{ username }}</b> (<a href="/logout">logout</a>)
-    {% endif %}
-</div>
 <div style="float: left">
 <div class="menu">
-   <b>Ton-Nu's notebox</b>
-   <br>
-   {% if username == "" %}
-   {% else %}
-   + 🕊 <a href="/">fleeting note</a>
-   {% endif %}
-   {# + 🕊 <a href="write-a-card">fleeting note</a> #}
-   {# <br> #}
-   {# + 📖 <a href="write-a-card">literature note</a> #}
-   {# <br> #}
-   {# + 🖋️ <a href="write-a-card">permanent note</a> #}
-   {# <br> #}
-   {# + 🗂️ <a href="write-a-card">index note</a> #}
-   </div>
+   📂 sign in
+   <form action="/login" method="get">
+    <input type="text" name="username" placeholder="Username">
+    <input name="password" type="password" placeholder="Password">
+  <br><br>
+  <input type="submit" value="Submit">
+  </form>
 
-<div class="notes">
-    {% if notes == "" %}
-    🕳️
-    {% else %}
-    {{ notes }}
-    {% endif %}
-</div>
-
-</div>
-<div style="float: left">
-<div class="box">
-   <h1>🕊 New fleeting note</h1>
-   <h2 style="color: grey">{{ date }} </h2>
-   <form action="/put-card" method="get">
-     <input type="text" name="title" placeholder="Title">
-
-     <div class="dropdown" style="float:right;">
-        <input type="button" value="Link to note" onclick="myFunction()" class="dropbtn"></button>
-        <div id="myDropdown" class="dropdown-content">
-            {{ notes_drop }}
-        </div>
-      </div>
-
-
-     <br><br>
-      <textarea id="newcontent" name="content" rows="20" cols="85" placeholder="What do you want to write about?"></textarea>
-   <br><br>
-   <input type="submit" value="Submit">
-   <input type="hidden" name="date" value="{{ date }}" />
-   </form>
-</div>
-</div>
+  </div>
 </body>
 </html>

@@ -36,9 +36,21 @@ body {
 </head>
 <body>
 <title>hello</title>
+<div class="box" style="font-size:15px; width:1070px">
+    {% if username == "" %}
+    <b><a href="/home">Login</a></b>
+    {% else %}
+    <b>{{ username }}</b> (<a href="/logout">logout</a>)
+    {% endif %}
+</div>
 <div style="float: left">
 <div class="menu">
+   <b>Ton-Nu's notebox</b>
+   <br>
+   {% if username == "" %}
+   {% else %}
    + 🕊 <a href="/">fleeting note</a>
+   {% endif %}
    {# + 🕊 <a href="write-a-card">fleeting note</a> #}
    {# <br> #}
    {# + 📖 <a href="write-a-card">literature note</a> #}

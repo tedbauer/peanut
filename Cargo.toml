@@ -9,5 +9,8 @@ axum = "0.6.20"
 sqlite = "0.31.1"
 tera = "1.0"
 serde = { version = "1.0.188", features = ["derive"] }
+rand = "0.8.5"
+async-session = "3.0.0"
 chrono = "0.4.30"
 markdown = "0.3.0"
+axum-sessions="0.5.0"
