@@ -83,7 +83,7 @@ async fn note(
         .unwrap()
         .into_iter()
         .into_iter()
-        .map(|row| row.unwrap().read::<&str, _>("date").to_string())
+        .map(|row| row.unwrap() .read::<&str, _>("date").to_string())
         .collect::<Vec<_>>()
         .join("");
 
@@ -107,7 +107,6 @@ async fn note(
                 context.insert("logged_in", &0);
             }
         }
-    
 
     // match &session.get::<usize>("foo") {
     //     Some(val) => {
