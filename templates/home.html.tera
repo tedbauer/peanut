@@ -99,7 +99,9 @@ body {
 <title>hello</title>
 <div style="float: left">
 <div class="menu">
-   📂 sign in
+    🫖 Kettle notes
+    <br>
+   {# 📂 sign in #}
    <form action="/login" method="get">
     <input type="text" name="username" placeholder="Username">
     <input name="password" type="password" placeholder="Password">

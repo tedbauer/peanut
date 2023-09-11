@@ -245,12 +245,12 @@ async fn main() {
     let store = async_session::MemoryStore::new();
     let session_layer = SessionLayer::new(store, b"hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello");
 
-    let connection = sqlite::open(":memory:").unwrap();
+    let connection = sqlite::open("notes.db").unwrap();
 
     let query = "
     CREATE TABLE IF NOT EXISTS notes (title TEXT, content TEXT, date TEXT);
-    CREATE TABLE IF NOT EXISTS users (username TEXT, password TEXT);
-    INSERT INTO users VALUES ('tonnu', 'passwd');
+    CREATE TABLE IF NOT EXISTS users (username TEXT, password TEXT, UNIQUE(username, password));
+    INSERT OR IGNORE INTO users VALUES ('tonnu', 'passwd');
 ";
     connection.execute(query).unwrap();
 
