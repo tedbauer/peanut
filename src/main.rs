@@ -55,6 +55,30 @@ struct WriteCardParams {
     date: String,
 }
 
+
+#[derive(Debug, Deserialize)]
+#[allow(dead_code)]
+struct DeleteNoteParams {
+    title: String,
+}
+
+async fn delete_note(
+    Query(params): Query<DeleteNoteParams>,
+    State(state): State<Arc<AppState>>,
+) -> impl IntoResponse {
+    let mut tera = Tera::new("templates/**/*").unwrap();
+    let mut context = tera::Context::new();
+
+    let query = format!(
+        "DELETE FROM notes WHERE title = '{}'",
+        params.title,
+    );
+    let conn: Arc<AppState> = state.clone();
+    let conn2 = conn.connection.lock().unwrap();
+    conn2.execute(query).unwrap();
+    Redirect::to(&"/")
+}
+
 async fn note(
     Query(params): Query<NoteParams>,
     State(state): State<Arc<AppState>>,
@@ -271,6 +295,7 @@ async fn main() {
         .route("/put-card", get(put_card))
         .route("/note", get(note))
         .route("/login", get(login))
+        .route("/delete", get(delete_note))
         .route("/logout", get(logout))
         .route("/home", get(home))
         .layer(session_layer)

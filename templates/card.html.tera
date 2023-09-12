@@ -70,7 +70,12 @@ body {
 </div>
 <div style="float: left">
     <div class="box">
-        <h1>{{ title }} <span style="color: grey"><i>{{date}}</i></span></h1>
+        <h1>{{ title }} <span style="color: grey"><i>{{date}}</i></span>
+            {% if username != "" %}
+            <span style="float:right; font-size:20px"><a href="/delete?title={{title}}">delete</a>
+            </span>
+            {% endif %}
+        </h1>
         <p>
          {{ content }}
         </p>

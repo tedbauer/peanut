@@ -28,7 +28,6 @@
    </style>
    </head>
    <body>
-   <title>hello</title>
    <div class="box">
        <h1>{{ title }} <span style="color: grey"><i>{{date}}</i></span></h1>
        <p>
