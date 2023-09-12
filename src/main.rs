@@ -242,7 +242,9 @@ async fn home() -> impl IntoResponse {
 #[tokio::main]
 async fn main() {
     let store = async_session::MemoryStore::new();
-    let session_layer = SessionLayer::new(store, b"hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello");
+    let secret = rand::thread_rng().gen::<[u8; 128]>();
+    let session_layer = SessionLayer::new(store, &secret);
+
 
     let connection = sqlite::open("notes.db").unwrap();
 
