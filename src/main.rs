@@ -25,6 +25,7 @@ use tera::Tera;
 
 struct AppState {
     connection: Mutex<Connection>,
+    store: MemoryStore,
 }
 
 #[derive(Debug, Deserialize)]
@@ -66,6 +67,7 @@ async fn note(
     let query2 = format!("SELECT * FROM notes WHERE title = '{}'", params.title);
     let query3 = "SELECT * FROM notes";
     let conn: Arc<AppState> = state.clone();
+    println!("{}", conn.store.count().await);
     let conn2 = conn.connection.lock().unwrap();
 
     let content_md = conn2
@@ -243,7 +245,7 @@ async fn home() -> impl IntoResponse {
 async fn main() {
     let store = async_session::MemoryStore::new();
     let secret = rand::thread_rng().gen::<[u8; 128]>();
-    let session_layer = SessionLayer::new(store, &secret);
+    let session_layer = SessionLayer::new(store.clone(), &secret);
 
 
     let connection = sqlite::open("notes.db").unwrap();
@@ -261,7 +263,7 @@ async fn main() {
 
     let conn = Mutex::new(connection);
 
-    let shared_state = Arc::new(AppState { connection: conn });
+    let shared_state = Arc::new(AppState { connection: conn, store });
 
     let app = Router::new()
         .route("/", get(hello))
