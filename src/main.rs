@@ -269,7 +269,7 @@ async fn home() -> impl IntoResponse {
 async fn main() {
     let store = async_session::MemoryStore::new();
     let secret = rand::thread_rng().gen::<[u8; 128]>();
-    let session_layer = SessionLayer::new(store.clone(), &secret);
+    let session_layer = SessionLayer::new(store.clone(), &secret).with_secure(false);
 
 
     let connection = sqlite::open("notes.db").unwrap();
