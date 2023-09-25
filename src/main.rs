@@ -176,7 +176,7 @@ async fn login(
     } else {
         println!("nope");
     }
-    Redirect::to(&("/"))
+    Redirect::to(&("/hello"))
 }
 
 async fn logout(mut session: WritableSession) -> impl IntoResponse {
@@ -197,6 +197,12 @@ async fn hello(
     let query2 = "SELECT * FROM notes";
     let conn: Arc<AppState> = state.clone();
     let conn2 = conn.connection.lock().unwrap();
+
+    if session.get::<String>("username").is_none() || session.get::<String>("username").unwrap().eq(""){
+        return Html("Please login.".to_owned());
+        println!("nope");
+      }
+        println!("yes");
 
     let titles = conn2
         .prepare(query)
@@ -252,9 +258,16 @@ async fn put_card(
     Redirect::to(&("/note?title=".to_owned() + &params.title))
 }
 
-async fn new_card() -> impl IntoResponse {
+async fn new_card(
+    mut session: WritableSession,
+) -> impl IntoResponse {
     let mut tera = Tera::new("templates/**/*").unwrap();
     let mut context = tera::Context::new();
+
+    if session.get::<String>("username").is_none() {
+      return Html("Please login.".to_owned());
+    }
+
     context.insert("date", &format!("{}", Local::now().format("%m/%d/%Y")));
     Html(tera.render("write-card.html.tera", &context).unwrap())
 }
@@ -290,7 +303,7 @@ async fn main() {
     let shared_state = Arc::new(AppState { connection: conn, store });
 
     let app = Router::new()
-        .route("/", get(hello))
+        .route("/", get(home))
         .route("/write-a-card", get(new_card))
         .route("/put-card", get(put_card))
         .route("/note", get(note))
@@ -298,6 +311,7 @@ async fn main() {
         .route("/delete", get(delete_note))
         .route("/logout", get(logout))
         .route("/home", get(home))
+        .route("/hello", get(hello))
         .layer(session_layer)
         .with_state(shared_state);
 

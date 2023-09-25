@@ -99,7 +99,7 @@ body {
 <title>hello</title>
 <div style="float: left">
 <div class="menu">
-    🫖 Kettle notes
+    🍫 Dulcet notes
     <br>
    {# 📂 sign in #}
    <form action="/login" method="get">

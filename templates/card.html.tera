@@ -49,7 +49,7 @@ body {
    <br>
    {% if username == "" %}
    {% else %}
-   + 🕊 <a href="/">fleeting note</a>
+   + 🕊 <a href="/hello">fleeting note</a>
    {% endif %}
    {# + 🕊 <a href="write-a-card">fleeting note</a> #}
    {# <br> #}
@@ -70,7 +70,7 @@ body {
 </div>
 <div style="float: left">
     <div class="box">
-        <h1>{{ title }} <span style="color: grey"><i>{{date}}</i></span>
+        <h1><span style="color: grey; font-size: 20px"><i>{{date}}</i>&nbsp;</span>{{ title }}
             {% if username != "" %}
             <span style="float:right; font-size:20px"><a href="/delete?title={{title}}">delete</a>
             </span>

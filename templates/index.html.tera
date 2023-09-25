@@ -110,7 +110,7 @@ body {
    <br>
    {% if username == "" %}
    {% else %}
-   + 🕊 <a href="/">fleeting note</a>
+   + 🕊 <a href="/hello">fleeting note</a>
    {% endif %}
    {# + 🕊 <a href="write-a-card">fleeting note</a> #}
    {# <br> #}
