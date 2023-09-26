@@ -941,6 +941,7 @@ dependencies = [
  "async-session",
  "axum",
  "axum-sessions",
+ "base64 0.21.4",
  "chrono",
  "markdown",
  "rand",

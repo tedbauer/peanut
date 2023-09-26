@@ -2,6 +2,7 @@ use axum::response::Html;
 use axum::response::IntoResponse;
 use axum::routing::get;
 use axum::routing::post;
+use base64::{decode, encode};
 use rand::Rng;
 
 use axum::{
@@ -55,7 +56,6 @@ struct WriteCardParams {
     date: String,
 }
 
-
 #[derive(Debug, Deserialize)]
 #[allow(dead_code)]
 struct DeleteNoteParams {
@@ -69,10 +69,7 @@ async fn delete_note(
     let mut tera = Tera::new("templates/**/*").unwrap();
     let mut context = tera::Context::new();
 
-    let query = format!(
-        "DELETE FROM notes WHERE title = '{}'",
-        params.title,
-    );
+    let query = format!("DELETE FROM notes WHERE title = '{}'", params.title,);
     let conn: Arc<AppState> = state.clone();
     let conn2 = conn.connection.lock().unwrap();
     conn2.execute(query).unwrap();
@@ -94,7 +91,7 @@ async fn note(
     println!("{}", conn.store.count().await);
     let conn2 = conn.connection.lock().unwrap();
 
-    let content_md = conn2
+    let content_md_encoded = conn2
         .prepare(query)
         .unwrap()
         .into_iter()
@@ -102,6 +99,12 @@ async fn note(
         .map(|row| row.unwrap().read::<&str, _>("content").to_string())
         .collect::<Vec<_>>()
         .join("");
+
+    let content_md: String = match decode(content_md_encoded.clone()) {
+        Ok(c) => String::from_utf8(c).unwrap_or("Invalid content, sorry. 😿".to_string()),
+        _ => content_md_encoded,
+    };
+
     let content = markdown::to_html(&content_md);
 
     let date = conn2
@@ -109,7 +112,7 @@ async fn note(
         .unwrap()
         .into_iter()
         .into_iter()
-        .map(|row| row.unwrap() .read::<&str, _>("date").to_string())
+        .map(|row| row.unwrap().read::<&str, _>("date").to_string())
         .collect::<Vec<_>>()
         .join("");
 
@@ -123,16 +126,16 @@ async fn note(
         .collect::<Vec<_>>()
         .join("");
 
-        match &session.get::<String>("username") {
-            Some(val) => {
-                context.insert("username", &val);
-                context.insert("logged_in", &1);
-            }
-            None => {
-                context.insert("username", &"");
-                context.insert("logged_in", &0);
-            }
+    match &session.get::<String>("username") {
+        Some(val) => {
+            context.insert("username", &val);
+            context.insert("logged_in", &1);
         }
+        None => {
+            context.insert("username", &"");
+            context.insert("logged_in", &0);
+        }
+    }
 
     // match &session.get::<usize>("foo") {
     //     Some(val) => {
@@ -142,6 +145,7 @@ async fn note(
     //         context.insert("content", &content);
     //     }
     // }
+
     context.insert("content", &content);
     context.insert("title", &params.title);
     context.insert("notes", &titles);
@@ -198,11 +202,13 @@ async fn hello(
     let conn: Arc<AppState> = state.clone();
     let conn2 = conn.connection.lock().unwrap();
 
-    if session.get::<String>("username").is_none() || session.get::<String>("username").unwrap().eq(""){
+    if session.get::<String>("username").is_none()
+        || session.get::<String>("username").unwrap().eq("")
+    {
         return Html("Please login.".to_owned());
         println!("nope");
-      }
-        println!("yes");
+    }
+    println!("yes");
 
     let titles = conn2
         .prepare(query)
@@ -248,9 +254,11 @@ async fn put_card(
     let mut tera = Tera::new("templates/**/*").unwrap();
     let mut context = tera::Context::new();
 
+    let encoded_content = encode(params.content);
+
     let query = format!(
         "INSERT INTO notes VALUES ('{}', '{}', '{}')",
-        params.title, params.content, params.date
+        params.title, encoded_content, params.date
     );
     let conn: Arc<AppState> = state.clone();
     let conn2 = conn.connection.lock().unwrap();
@@ -258,14 +266,12 @@ async fn put_card(
     Redirect::to(&("/note?title=".to_owned() + &params.title))
 }
 
-async fn new_card(
-    mut session: WritableSession,
-) -> impl IntoResponse {
+async fn new_card(mut session: WritableSession) -> impl IntoResponse {
     let mut tera = Tera::new("templates/**/*").unwrap();
     let mut context = tera::Context::new();
 
     if session.get::<String>("username").is_none() {
-      return Html("Please login.".to_owned());
+        return Html("Please login.".to_owned());
     }
 
     context.insert("date", &format!("{}", Local::now().format("%m/%d/%Y")));
@@ -284,7 +290,6 @@ async fn main() {
     let secret = rand::thread_rng().gen::<[u8; 128]>();
     let session_layer = SessionLayer::new(store.clone(), &secret).with_secure(false);
 
-
     let connection = sqlite::open("notes.db").unwrap();
 
     let query = "
@@ -300,7 +305,10 @@ async fn main() {
 
     let conn = Mutex::new(connection);
 
-    let shared_state = Arc::new(AppState { connection: conn, store });
+    let shared_state = Arc::new(AppState {
+        connection: conn,
+        store,
+    });
 
     let app = Router::new()
         .route("/", get(home))
